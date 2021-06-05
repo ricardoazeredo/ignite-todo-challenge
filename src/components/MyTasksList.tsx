@@ -1,13 +1,7 @@
 import React from 'react';
 import { FlatList, TouchableOpacity, View, Text, StyleSheet, FlatListProps } from 'react-native';
 
-function FlatListHeaderComponent() {
-  return (
-    <View>
-      <Text style={styles.header}>Minhas tasks</Text>
-    </View>
-  )
-}
+import {FlatListHeaderComponent} from './FlatListHeaderComponent';
 
 interface MyTasksListProps {
   tasks: {
@@ -17,9 +11,11 @@ interface MyTasksListProps {
   }[];
   onPress: (id: number) => void;
   onLongPress: (id: number) => void;
+  theme: boolean;
 }
 
-export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
+export function MyTasksList({ tasks, onLongPress, onPress, theme }: MyTasksListProps) {
+  
   return (
     <FlatList
       data={tasks}
@@ -37,34 +33,37 @@ export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
             <View 
               testID={`marker-${index}`}
               //TODO - use style prop 
-              style={item.done ? styles.taskMarkerDone : styles.taskMarker}
+              style={(theme)? 
+                (item.done ? styles.taskMarkerDarkDone : styles.taskMarkerDark)
+                :(item.done ? styles.taskMarkerDone : styles.taskMarker)
+              }
             />
             <Text 
               //TODO - use style prop
-              style={item.done ?styles.taskTextDone : styles.taskText}
+              style={
+                (theme)? 
+                (item.done ?styles.taskTextDarkDone : styles.taskTextDark) 
+                :(item.done ?styles.taskTextDone : styles.taskText)
+              }
             >
               {item.title}
             </Text>
           </TouchableOpacity>
         )
       }}
-      ListHeaderComponent={<FlatListHeaderComponent />}
+      ListHeaderComponent={<FlatListHeaderComponent theme={theme} />}
       ListHeaderComponentStyle={{
         marginBottom: 20
       }}
-      style={{
-        marginHorizontal: 24,
-        marginTop: 32
-      }}
+      style={styles.container}
     />
   )
 }
 
 const styles = StyleSheet.create({
-  header: {
-    color: '#3D3D4D',
-    fontSize: 24,
-    fontFamily: 'Poppins-SemiBold'
+  container: {    
+    marginHorizontal: 24,
+    marginTop: 32
   },
   taskButton: {
     flex: 1,
@@ -83,8 +82,19 @@ const styles = StyleSheet.create({
     borderColor: '#3D3D4D',
     marginRight: 10
   },
+  taskMarkerDark: {
+    height: 16,
+    width: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#3D3D4D',
+    marginRight: 10
+  },
   taskText: {
     color: '#3D3D4D',
+  },
+  taskTextDark: {
+    color: '#67E480',
   },
   taskButtonDone: {
     flex: 1,
@@ -105,6 +115,17 @@ const styles = StyleSheet.create({
   },
   taskTextDone: {
     color: '#A09CB1',
+    textDecorationLine: 'line-through'
+  },
+  taskMarkerDarkDone: {
+    height: 16,
+    width: 16,
+    borderRadius: 8,
+    backgroundColor: '#67E480',
+    marginRight: 10
+  },
+  taskTextDarkDone: {
+    color: '#E1E1E6',
     textDecorationLine: 'line-through'
   }
 })

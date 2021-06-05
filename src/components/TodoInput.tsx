@@ -5,9 +5,10 @@ import checkIcon from '../assets/icons/Check.png';
 
 interface TodoInputProps {
   addTask: (task: string) => void;
+  theme: boolean;
 }
 
-export function TodoInput({ addTask }: TodoInputProps) {
+export function TodoInput({ addTask,theme }: TodoInputProps) {
   const [task, setTask] = useState('');
 
   function handleAddNewTask() {
@@ -15,7 +16,7 @@ export function TodoInput({ addTask }: TodoInputProps) {
     addTask(task);
     setTask('');
   }
-
+  
   return (
     <View style={[styles.inputContainer, Platform.OS === 'ios' ? styles.inputIOSShadow : styles.inputAndroidShadow]}>
       <TextInput 
@@ -32,7 +33,7 @@ export function TodoInput({ addTask }: TodoInputProps) {
       <TouchableOpacity
         testID="add-new-task-button"
         activeOpacity={0.7}
-        style={styles.addButton}
+        style={(!theme)? styles.addButton: styles.addButtonDark }
         onPress={handleAddNewTask}
         //TODO - onPress prop
       >
@@ -72,7 +73,16 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   addButton: {
-    backgroundColor: '#3FAD27',
+    backgroundColor:'#3FAD27',
+    height: 50,
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+  },
+  addButtonDark: {
+    backgroundColor:'#988BC7',
     height: 50,
     paddingHorizontal: 16,
     justifyContent: 'center',
